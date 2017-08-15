@@ -65,3 +65,6 @@ class GhostbustersRPGRoller(object):
         Label(page, text='Your roll: ').grid(row=3, column=0)
         display.grid(row=3, column=1)
         page.pack()
+
+
+GhostbustersRPGRoller().run()
