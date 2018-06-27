@@ -27,6 +27,8 @@ class GhostbustersRPGRoller(object):
         self.brownie_var = StringVar()
         self.brownie_var.set('0')
         self.display_var = StringVar()
+        self.total_brownie_var = StringVar()
+        self.total_brownie_var.set('0')
 
     def run(self):
         self.make_roller()
@@ -60,6 +62,11 @@ class GhostbustersRPGRoller(object):
         is_talent = bool(self.muscles_talent_var.get())
         self.roll_dice(dice_total, is_talent)
 
+    def update_brownie_points(self):
+        points_used = int(self.brownie_var.get())
+        points_left = int(self.total_brownie_var.get()) - points_used
+        self.total_brownie_var.set(points_left)
+
     def roll_dice(self, dice_total, is_talent):
         if self.dice_list:
             self.dice_list = []
@@ -67,6 +74,7 @@ class GhostbustersRPGRoller(object):
             dice_total += int(self.brownie_var.get())
         except ValueError:
             pass
+        self.update_brownie_points()
         if is_talent:
             dice_total += 3
         self.roll_ghost()
@@ -90,7 +98,6 @@ class GhostbustersRPGRoller(object):
         cool_talent = Checkbutton(page, text='Talent?', variable=self.cool_talent_var, onvalue=1, offvalue=0)
         moves_talent = Checkbutton(page, text='Talent?', variable=self.moves_talent_var, onvalue=1, offvalue=0)
         muscles_talent = Checkbutton(page, text='Talent?', variable=self.muscles_talent_var, onvalue=1, offvalue=0)
-        brownie_points = Entry(page, textvariable=self.brownie_var)
         display = Entry(
             page, textvariable=self.display_var, foreground='black', state=DISABLED, justify=CENTER
         )
@@ -110,10 +117,14 @@ class GhostbustersRPGRoller(object):
         muscles_dice.grid(row=3, column=1)
         muscles_talent.grid(row=3, column=2)
         Button(page, text='Roll Muscles!', command=self.roll_muscles).grid(row=3, column=3)
-        Label(page, text='Apply Brownie points:').grid(row=4, column=0)
-        brownie_points.grid(row=4, column=1)
-        Label(page, text='Your roll: ').grid(row=5, column=0)
-        display.grid(row=5, column=1)
+        Label(page, text='Total Brownie Points:').grid(row=4, column=0)
+        total_brownie = Spinbox(page, textvariable=self.total_brownie_var, from_=0, to=100)
+        total_brownie.grid(row=4, column=1)
+        Label(page, text='Apply Brownie\npoints to roll:').grid(row=4, column=2)
+        brownie_points = Entry(page, textvariable=self.brownie_var)
+        brownie_points.grid(row=4, column=3)
+        Label(page, text='Your roll: ').grid(row=5, column=0, columnspan=2)
+        display.grid(row=5, column=1, columnspan=2)
         page.pack()
 
 
