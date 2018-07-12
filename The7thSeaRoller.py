@@ -7,15 +7,17 @@ from ttk import *
 class The7thSeaRoller(object):
     def __init__(self):
         self.dice_list = []
+        self.root = Tk()
+        self.root.wm_title('7th Sea Raise Roller')
 
     def run(self):
-        self.make_root()
+        # self.make_root()
         self.make_roller()
         self.root.mainloop()
 
-    def make_root(self):
-        self.root = Tk()
-        self.root.wm_title('7th Sea Raise Roller')
+#    def make_root(self):
+#        self.root = Tk()
+#        self.root.wm_title('7th Sea Raise Roller')
 
     def roll_dice(self):
         if self.dice_list:
@@ -48,16 +50,19 @@ class The7thSeaRoller(object):
     def calculate_raises(self):
         dice_copy = deepcopy(self.dice_list)
         raise_target = 10
+        import pdb; pdb.set_trace()
         double_raises = False
         if int(self.skill_dice.get()) > 4:
             double_raises = True
-        if self.gm_var:
+        if self.gm_var.get():
             raise_target += 5
         if double_raises:
             self.group_raises(dice_copy, raise_target + 5, 2)
-        # self.group_raises(dice_copy, raise_target, 1)
+        else:
+            self.group_raises(dice_copy, raise_target, 1)
 
     def group_raises(self, rolls, target, raises_per_set):
+        print target
         raises = []
         initial = 10
         # If target is 10, all 10s count as a single Raise
@@ -66,6 +71,7 @@ class The7thSeaRoller(object):
                 raises.append((rolls.pop()))
             initial = 9
         while sum(rolls) > target:
+            break
             for h in range(min(initial, target), 0, -1):
                 l = min(target - h, h)
 
@@ -102,3 +108,5 @@ class The7thSeaRoller(object):
         raise_button.grid(row=6, column=1, columnspan=2)
         self.raise_field.grid(row=7, column=0, columnspan=3)
         page.pack()
+
+The7thSeaRoller().run()
