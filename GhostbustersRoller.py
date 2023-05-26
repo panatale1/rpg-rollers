@@ -1,6 +1,6 @@
 from random import randint
-from Tkinter import *
-from ttk import *
+from tkinter import *
+from tkinter.ttk import *
 
 
 class GhostbustersRPGRoller(object):
